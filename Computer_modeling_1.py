@@ -94,8 +94,3 @@ for test in ('test_1(29).tsp', 'test_2(58).tsp', 'test_3(561).tsp'):
                 cities[i][j] = data.get_weight(i, j)
 
     print(test, "- длина найденного решения:", genetic_algorithm(city_swap(initial_solution)))
-
-
-
-
-
