@@ -22,10 +22,11 @@ def genetic_algorithm(population):
     while True:
         # Выбор родителей
         lengths = [path_length(solution) for solution in population]
+        weights = [(1 / length) for length in lengths]
 
         best = rand = population[lengths.index(min(lengths))]
         while best == rand:
-            rand = population[random.randint(0, len(population) - 1)]
+            rand = population[lengths.index(*random.choices(lengths, weights))]
 
 
 
@@ -80,11 +81,9 @@ def path_length(solution):
 
 
 for test in ('test_1(29).tsp', 'test_2(58).tsp', 'test_3(561).tsp'):
-    data = tsplib95.load(test)
-    n    = data.dimension
-
-    cities           = [[0] * n for _ in range(n)]
-    initial_solution = [i for i in range(len(cities))]
+    data   = tsplib95.load(test)
+    n      = data.dimension
+    cities = [[0] * n for _ in range(n)]
 
     for i in range(0, n):
         for j in range(0, n):
@@ -92,5 +91,7 @@ for test in ('test_1(29).tsp', 'test_2(58).tsp', 'test_3(561).tsp'):
                 cities[i][j] = data.get_weight(i + 1, j + 1)
             else:
                 cities[i][j] = data.get_weight(i, j)
+
+    initial_solution = [i for i in range(len(cities))]
 
     print(test, "- длина найденного решения:", genetic_algorithm(city_swap(initial_solution)))
